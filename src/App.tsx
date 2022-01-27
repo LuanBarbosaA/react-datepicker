@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { ThemeProvider } from 'styled-components';
+import DatePickerForm from './components/InputDatepicker/DatePickerForm';
+import { IThemeStyle } from './components/InputDatepicker/types/ThemeStyle';
+
 
 function App() {
+  let theme = {
+    colors: {
+      white: '#ffffff',
+      green: '',
+      primary: '',
+      primaryDark: '',
+      secondary: '',
+      backgroundApp: '',
+      text: '',
+      textLighter: '',
+      error: '',
+    }
+  } as IThemeStyle;
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div>Luan</div>
+      <DatePickerForm theme={theme} background="#f1f1f1" color="#000000" type="text" name={'start_date'} label={'Data da retirada'} />
+    </>
   );
 }
 
