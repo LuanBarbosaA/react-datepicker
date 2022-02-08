@@ -12,10 +12,14 @@ function App() {
       primary: '',
       primaryDark: '',
       secondary: '',
-      backgroundApp: '',
+      backgroundApp: '#f1f1f1',
       text: '',
       textLighter: '',
       error: '',
+    }, 
+    sizes: {
+      width: '315px',
+      height: ''
     }
   } as IThemeStyle;
 
@@ -23,7 +27,7 @@ function App() {
   return (
     <>
       <div>Luan</div>
-      <DatePickerForm theme={theme} background="#f1f1f1" color="#000000" type="text" name={'start_date'} label={'Data da retirada'} />
+      <DatePickerForm theme={theme} type="text" name={'start_date'} label={'Data da retirada'} />
     </>
   );
 }

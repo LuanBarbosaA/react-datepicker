@@ -8,7 +8,7 @@ const InputDatepicker: React.ForwardRefRenderFunction<HTMLInputElement, PropsWit
   props,
   ref
 ) => {
-  const { name, label, icon: Icon, theme, background, ...rest } = props;
+  const { name, label, icon: Icon, theme, ...rest } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   // const { fieldName, defaultValue, error, registerField } = useField(name);
@@ -33,7 +33,7 @@ const InputDatepicker: React.ForwardRefRenderFunction<HTMLInputElement, PropsWit
   // }, [fieldName, registerField]);
 
   return (
-    <Container theme={theme} background={background} isFilled={isFilled} isFocused={isFocused}>
+    <Container theme={theme} isFilled={isFilled} isFocused={isFocused}>
       {Icon && (
         <div className="icon-container">
           <Icon size={18} />

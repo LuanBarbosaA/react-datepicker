@@ -3,7 +3,7 @@ import { IThemeStyle } from '../types/ThemeStyle';
 
 interface ContainerProps {
     theme: IThemeStyle;
-    background: string;
+    // background: string;
     // isErrored: boolean;
     isFilled: boolean;
     isFocused: boolean;
@@ -11,14 +11,15 @@ interface ContainerProps {
 
 export const Container = styled.div<ContainerProps>`
   align-items: center;
-  background: ${(props) => props.background};
+  background: ${(props) => props.theme.colors.backgroundApp};
   border: 2px solid ${(props) => props.theme.colors.white};
   border-radius: 4px;
   display: flex;
   height: 58px;
   margin-bottom: 8px;
   position: relative;
-  width: 100%;
+  width: ${(props) => props.theme.sizes.width};
+  min-width: 300px;
 
   label {
     color: ${(props) => props.theme.colors.textLighter};
@@ -34,7 +35,8 @@ export const Container = styled.div<ContainerProps>`
     margin-top: 12px;
     outline: none;
     padding: 0 16px;
-    width: 100%;
+    width: ${(props) => props.theme.sizes.width};
+    min-width: 300px;
   }
 
   ${(props) =>

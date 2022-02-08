@@ -18,17 +18,28 @@ const DatePicker: React.ForwardRefRenderFunction<HTMLDivElement, PropsWithChildr
   props,
   ref
 ) => {
-  let { selectedDate = '', outputDate } = props;
+  let { selectedDate = '', outputDate, theme, cleanDay } = props;
 
   let defaultDay = useRef(+moment().format('DD'));
   let defaultMonth = useRef(+moment().format('MM'));
   let defaultYear = useRef(+moment().format('YYYY'));
 
-  const [days, setDays] = useState(Array());
+  const [days, setDays] = useState(Array<IDay>());
   const [monthName, setMonthName] = useState('');
   const [yearName, setYearName] = useState('');
 
+  const [selectedDay, setSelectedDay] = useState(Number);
+  const [hasSelectDay, setHasSelectDay] = useState(Boolean);
+
+  const cleanDays = () => {
+    if (hasSelectDay) {
+      days[selectedDay].selected = false;
+      setHasSelectDay(false);
+    }
+  }
+
   const getDays = () => {
+    
     let days: IDay[];
     days = new Array();
 
@@ -41,9 +52,12 @@ const DatePicker: React.ForwardRefRenderFunction<HTMLDivElement, PropsWithChildr
     for (let i = 0; dateEnd.diff(dateStart, 'days') >= 0; i++) {
       if (
         +selectedDate.toString().substr(0, 2) - 1 === i &&
-        +selectedDate.toString().substr(3, 2) === +defaultMonth.current
+        +selectedDate.toString().substr(3, 2) === +defaultMonth.current &&
+        selectedDate.length === 10
       ) {
         days.push({ day: dateStart.format('D'), selected: true, disabled: false });
+        setSelectedDay(i);
+        setHasSelectDay(true);
       } else {
         days.push({ day: dateStart.format('D'), selected: false, disabled: false });
       }
@@ -65,11 +79,9 @@ const DatePicker: React.ForwardRefRenderFunction<HTMLDivElement, PropsWithChildr
       }
 
       if (defaultMonth.current < 10) {
-        outDate =
-          selectedDate.substr(0, 2) + '/0' + defaultMonth.current.toString() + '/' + defaultYear.current.toString();
+        outDate = selectedDate.substr(0, 2) + '/0' + defaultMonth.current.toString() + '/' + defaultYear.current.toString();
       } else {
-        outDate =
-          selectedDate.substr(0, 2) + '/' + defaultMonth.current.toString() + '/' + defaultYear.current.toString();
+        outDate = selectedDate.substr(0, 2) + '/' + defaultMonth.current.toString() + '/' + defaultYear.current.toString();
       }
 
       outputDate(outDate);
@@ -146,9 +158,13 @@ const DatePicker: React.ForwardRefRenderFunction<HTMLDivElement, PropsWithChildr
     selectDate();
   }, [selectedDate]);
 
+  useEffect(() => {
+    cleanDays();
+  }, [cleanDay]);
+
   return (
     <>
-      <DatePickerContainer ref={ref}>
+      <DatePickerContainer theme={theme} ref={ref}>
         <DatePickerHeaderContainer>
           <DatePickerButton
             width={'20%'}
@@ -171,7 +187,7 @@ const DatePicker: React.ForwardRefRenderFunction<HTMLDivElement, PropsWithChildr
 
         <SubHeaderDatePickerContainer>
           {daysOfWeek.map((day, id) => (
-            <div key={id}>{day}</div>
+            <div style={{textAlign: 'center'}} key={id}>{day}</div>
           ))}
         </SubHeaderDatePickerContainer>
 

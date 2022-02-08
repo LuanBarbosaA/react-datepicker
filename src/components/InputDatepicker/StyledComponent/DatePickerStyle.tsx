@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import { IThemeStyle } from '../types/ThemeStyle';
 
 interface IDatePickerButtonContainerProps {
+    theme: IThemeStyle;
     backGroundColor?: string;
     gridColumnsStart?: number;
     width?: string;  
@@ -8,7 +10,8 @@ interface IDatePickerButtonContainerProps {
 
 export const DatePickerContainer = styled.div`
     background: #F2F2FA;
-    position: absolute;
+    position: relative;
+    width: ${(props) => props.theme.sizes.width};
     min-width: 300px;
     border-radius: 5px;
     box-shadow: 0 1px 6px rgb(32 33 36 / 28%);
@@ -51,13 +54,13 @@ export const DatePickerButtonContainer = styled.button<IDatePickerButtonContaine
 export const SubHeaderDatePickerContainer = styled.div`
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(7, auto);
+    grid-template-columns: repeat(7, 45px);
     color: black;
 `;
 
 export const DatePickerBodyContainer = styled.div`
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(7, auto);
+    grid-template-columns: repeat(7, 45px);
     grid-template-rows: repeat(6, 50px);
 `;

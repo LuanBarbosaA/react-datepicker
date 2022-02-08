@@ -6,8 +6,6 @@ import InputDatepicker from './InputDatepicker';
 import { IProps } from './types/DatePickerFormType';
 
 const DatePickerForm: FC<IProps> = ({
-  background = '#ffffff',
-  color = '#000000',
   iconStart,
   iconEnd,
   label = '',
@@ -18,6 +16,7 @@ const DatePickerForm: FC<IProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState('');
+  const [clean, setCleanDays] = useState(false);
   const inputRef = useRef(document.createElement("input"));
   const visibleRef = useRef(document.createElement("div"));
 
@@ -39,6 +38,7 @@ const DatePickerForm: FC<IProps> = ({
 
   const outputDate = (outputDate: string) => {
     setDate(outputDate);
+    setCleanDays(false);
     inputRef.current.focus();
     inputRef.current.value = outputDate;
     visibleRef.current.style.display = 'none';
@@ -49,33 +49,34 @@ const DatePickerForm: FC<IProps> = ({
 
     if (val === '' || regexp.test(val) || val.charAt(2) === '/' || val.charAt(5) === '/') {
       if (event.nativeEvent.inputType !== 'deleteContentBackward') {
-        if (val.length == 2 && +val.substr(0, 2) > 31) {
+        if (val.length === 2 && +val.substring(0, 3) > 31) {
           val = '';
-        } else if (val.length == 5 && +val.substr(3, 2) > 12) {
+        } else if (val.length === 5 && +val.substring(3, 5) > 12) {
           val = '';
         }
-        if (val.length == 2 || val.length == 5) {
+        if (val.length === 2 || val.length === 5) {
           val += '/';
         }
       }
 
-      if (val.length >= 10 && (!(+val.substr(6, 4) > 1902) || !(+val.substr(6, 4) < 2050))) {
+      if (val.length >= 10 && (!(+val.substring(6, 10) > 1902) || !(+val.substring(6, 10) < 2050))) {
         setDate('');
+        setCleanDays(true);
         inputRef.current.value = '';
-      } else if (val.length >= 10 && moment(val, 'DD-MM-YYYY').isValid()) {
+      } else if (val.length >= 10 && moment(val.replace(/[/]/gm, '-'), 'DD-MM-YYYY').isValid()) {
+          setDate(val);
+          setCleanDays(false);
+          inputRef.current.value = val.substring(0, 10);
+      } else {
         setDate(val);
-        inputRef.current.value = val.substr(0, 10);
+        setCleanDays(true);
+        inputRef.current.value = val;
       }
-      setDate(val);
-      inputRef.current.value = val;
-    } else {
-      setDate('');
-      inputRef.current.value = '';
     }
   };
 
   return (
-    <>
+    <div style={{display: 'grid', justifyContent: 'center'}}>
       <div onClick={() => toggleDatepicker(!open)}>
         <InputDatepicker
           theme={theme}
@@ -83,8 +84,6 @@ const DatePickerForm: FC<IProps> = ({
           label={label}
           icon={FiCalendar}
           onChange={(event) => normalizeInputNumber(event)}
-          background={background}
-          color={color}
           autoComplete={'off'}
           maxLength={10}
           ref={inputRef}
@@ -93,9 +92,9 @@ const DatePickerForm: FC<IProps> = ({
       </div>
 
       <>
-        <DatePicker selectedDate={date} outputDate={(e: any) => outputDate(e)} ref={visibleRef} />
+        <DatePicker theme={theme} cleanDay={clean} selectedDate={date} outputDate={(e: any) => outputDate(e)} ref={visibleRef} />
       </>
-    </>
+    </div>
   );
 };
 

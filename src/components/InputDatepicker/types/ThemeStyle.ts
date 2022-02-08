@@ -9,5 +9,9 @@ export interface IThemeStyle {
         text: string;
         textLighter: string;
         error: string;
+    },
+    sizes: {
+        width: string,
+        height: string
     }
 }
